@@ -1,8 +1,9 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from pydantic import BaseModel
 from result import Result
 import logging
 from aip import AipImageClassify
+from pymongo import MongoClient
 
 app = FastAPI()
 result = Result()
@@ -17,12 +18,14 @@ logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 logger.addHandler(ch)
 
+mongodb = MongoClient("mongodb://localhost:27017")
+db = mongodb["pocket_go"]
+collection = db["user_item"]
+
 
 class Request(BaseModel):
-    staticFootPrint: list
-    dynamicFootPrint: list
-    url: str
-    bucket_name: str
+    user_id: int
+    item_name: str
 
 
 # Result: {code: , message:{}, data: }
@@ -56,3 +59,17 @@ async def fruitDetect(file: UploadFile = File(...)):
     res = client.ingredient(image)
 
     return result.success(res)
+
+
+@app.post("/item_pickup")
+def itemPickup(name, amount):
+    pass
+
+
+@app.post("/items")
+async def insert_item(item: Request):
+    query_result = collection.update_one(
+        {"_id": item.user_id},
+        {"$inc": {item.item_name: 1}}
+    )
+    return result.success(query_result.raw_result)
