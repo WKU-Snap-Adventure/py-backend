@@ -18,7 +18,7 @@ logger.setLevel(logging.INFO)
 ch = logging.StreamHandler()
 logger.addHandler(ch)
 
-mongodb = MongoClient("mongodb://localhost:27017")
+mongodb = MongoClient("mongodb://60.204.219.4:27017")
 db = mongodb["pocket_go"]
 collection = db["user_item"]
 
@@ -62,14 +62,17 @@ async def fruitDetect(file: UploadFile = File(...)):
 
 
 @app.post("/item_pickup")
-def itemPickup(name, amount):
-    pass
-
-
-@app.post("/items")
-async def insert_item(item: Request):
+def item_pickup(item: Request):
     query_result = collection.update_one(
         {"_id": item.user_id},
         {"$inc": {item.item_name: 1}}
     )
     return result.success(query_result.raw_result)
+
+
+@app.post("/item_list")
+async def item_list(user_id: int):
+    query_result = collection.find({"_id": user_id})
+    for data in query_result:
+        print(data)
+        return result.success(data)
