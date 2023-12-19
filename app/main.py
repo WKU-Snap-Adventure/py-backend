@@ -1,9 +1,11 @@
+import logging
+
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from pydantic import BaseModel
 from result import Result
-import logging
 from aip import AipImageClassify
 from pymongo import MongoClient
+from log import log, Loggers
 
 app = FastAPI()
 result = Result()
@@ -13,14 +15,11 @@ API_KEY = 'PCotYmhuxzkPnsOR9yucTsg8'
 SECRET_KEY = '7UI6k2eeH7yBeS9EWARkwyfaUGtrG7Mu'
 client = AipImageClassify(APP_ID, API_KEY, SECRET_KEY)
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-ch = logging.StreamHandler()
-logger.addHandler(ch)
-
-mongodb = MongoClient("mongodb://60.204.219.4:27017")
+mongodb = MongoClient("mongodb://localhost:27017")
 db = mongodb["pocket_go"]
 collection = db["user_item"]
+
+Loggers.init_config()
 
 
 class Request(BaseModel):
