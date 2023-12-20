@@ -4,7 +4,7 @@ from app.user.model import User
 from . import blue as app
 
 from flask import request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, current_user
+from flask_jwt_extended import create_access_token, jwt_required, current_user
 
 @app.route("/login", methods=["POST"])
 def login():

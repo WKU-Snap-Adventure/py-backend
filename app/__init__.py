@@ -17,9 +17,14 @@ jwt = JWTManager(app)
 db = SQLAlchemy(app)
 bc = Bcrypt(app)
 
+# Load Baidu AIP
+from .baidu_aip import objectDetect
+
 # Load Blueprints
 from app.user import blue as userblue
+from app.bag import blue as bagblue
 app.register_blueprint(userblue)
+app.register_blueprint(bagblue)
 
 # Create Database
 with app.app_context():

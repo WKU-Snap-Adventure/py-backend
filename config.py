@@ -15,3 +15,8 @@ class Config():
     # JWT Settings
     JWT_SECRET_KEY = 'jwtsecretkey'
     JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(days=5)
+
+    # Baidu API Settings
+    AIP_APP_ID = '45260609'
+    AIP_API_KEY = 'bprT6fPQpZlbInvAiAUCjEFj'
+    AIP_SECRET_KEY = 'mj8csDn6RAPoG8BDpRaIaIAqdqSx3yNs'

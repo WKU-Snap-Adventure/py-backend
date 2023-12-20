@@ -6,6 +6,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
     nickname = db.Column(db.String(50), nullable=True)
+    items = db.relationship('BagItem', backref='user', lazy=True)
 
     @property
     def password(self):
