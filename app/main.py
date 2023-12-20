@@ -61,10 +61,10 @@ async def fruitDetect(file: UploadFile = File(...)):
 
 
 @app.post("/item_pickup")
-def item_pickup(item: Request):
+async def item_pickup(user_id: int, item_name: str):
     query_result = collection.update_one(
-        {"_id": item.user_id},
-        {"$inc": {item.item_name: 1}}
+        {"_id": user_id},
+        {"$inc": {item_name: 1}}
     )
     return result.success(query_result.raw_result)
 
@@ -72,6 +72,18 @@ def item_pickup(item: Request):
 @app.post("/item_list")
 async def item_list(user_id: int):
     query_result = collection.find({"_id": user_id})
+    arr = []
     for data in query_result:
-        print(data)
-        return result.success(data)
+        for k, v in data.items():
+            arr.append(Item(k, v))
+        return result.success(arr)
+
+
+class Item:
+    item_name: str
+    item_amount: int
+
+    def __init__(self, item_name, item_amount):
+        self.item_amount = item_amount
+        self.item_name = item_name
+
