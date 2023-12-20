@@ -1,4 +1,5 @@
 import os
+import datetime
 
 # Grabs the folder where the script runs.
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -13,3 +14,4 @@ class Config():
 
     # JWT Settings
     JWT_SECRET_KEY = 'jwtsecretkey'
+    JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(days=5)

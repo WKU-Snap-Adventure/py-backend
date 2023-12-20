@@ -28,7 +28,7 @@ def login():
         nickname=user.nickname
         )
     # Set cookie (alternative way to store access token)
-    response.set_cookie("access_token", access_token)
+    response.set_cookie("access_token_cookie", access_token)
     # Return response
     return response, 200
 
