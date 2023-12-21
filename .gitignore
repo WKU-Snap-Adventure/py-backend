@@ -1,2 +1,43 @@
-.idea
-__pycache__
+# Python
+*.pyc
+__pycache__/
+.mypy_cache/
+
+# Virtual environment
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Compiled files
+*.pyc
+*.pyo
+*.pyd
+
+# Dependency directories
+lib/
+lib64/
+bin/
+include/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Miscellaneous
+*.swp
+*.swo
+.DS_Store
+
+# Database
+*.sqlite3
