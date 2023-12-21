@@ -66,3 +66,57 @@ def remove_item():
     db.session.commit()
     # Return response
     return jsonify({"msg": "Item removed", "count": item.count}), 200
+
+# Modify the items in batch
+@app.route("/items", methods=["PUT"])
+@jwt_required()
+def modify_items():
+    items_to_add = request.json.get("add", [])
+    items_to_remove = request.json.get("remove", [])
+    # Add items
+    for item in items_to_add:
+        item_name = item.get("item_name", None)
+        count = item.get("count", None)
+        # Check if item_name and count exist
+        if not item_name:
+            db.session.rollback()
+            return jsonify({"msg": "Missing item_name parameter"}), 400
+        if not count:
+            db.session.rollback()
+            return jsonify({"msg": "Missing count parameter"}), 400
+        # Create new item
+        item = BagItem.query.filter_by(user_id=current_user.id, item_name=item_name).one_or_none()
+        if item is not None:
+            item.count += count
+        else:
+            item = BagItem(user_id=current_user.id, item_name=item_name, count=count)
+            db.session.add(item)
+    # Remove items
+    for item in items_to_remove:
+        item_name = item.get("item_name", None)
+        count = item.get("count", None)
+        # Check if item_name and count exist
+        if not item_name:
+            db.session.rollback()
+            return jsonify({"msg": "Missing item_name parameter"}), 400
+        if not count:
+            db.session.rollback()
+            return jsonify({"msg": "Missing count parameter"}), 400
+        # Get item from database
+        item = BagItem.query.filter_by(user_id=current_user.id, item_name=item_name).one_or_none()
+        # Check if item exist
+        if item is None:
+            db.session.rollback()
+            return jsonify({"msg": "Item not found"}), 404
+        # Check if count is valid
+        if item.count < count:
+            db.session.rollback()
+            return jsonify({"msg": "No enough item"}), 400
+        # Update count
+        item.count -= count
+        if item.count == 0:
+            db.session.delete(item)
+    db.session.commit()
+    # Return response
+    return jsonify({"msg": "Items modified"}), 200
+    

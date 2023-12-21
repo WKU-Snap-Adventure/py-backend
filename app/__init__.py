@@ -23,8 +23,10 @@ from .baidu_aip import objectDetect
 # Load Blueprints
 from app.user import blue as userblue
 from app.bag import blue as bagblue
+from app.collect import blue as collectblue
 app.register_blueprint(userblue)
 app.register_blueprint(bagblue)
+app.register_blueprint(collectblue)
 
 # Create Database
 with app.app_context():
